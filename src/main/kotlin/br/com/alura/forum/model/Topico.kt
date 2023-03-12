@@ -4,7 +4,7 @@ import br.com.alura.forum.enums.StatusTopico
 import java.time.LocalDateTime
 
 data class Topico (
-    val id: Long? = null,
+    var id: Long? = null,
     val titulo: String,
     val mensagem: String,
     val dataCriacao: LocalDateTime = LocalDateTime.now(),
