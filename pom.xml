@@ -53,6 +53,25 @@
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-core</artifactId>
+      <version>5.6.15.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.26</version>
+    </dependency>
+    <dependency>
+      <groupId>com.h2database</groupId>
+      <artifactId>h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
+      <version>2.7.9</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -60,21 +79,35 @@
     <testSourceDirectory>${project.basedir}/src/test/kotlin</testSourceDirectory>
     <plugins>
       <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
         <groupId>org.jetbrains.kotlin</groupId>
         <artifactId>kotlin-maven-plugin</artifactId>
+        <version>${kotlin.version}</version>
         <configuration>
-          <args>
-            <arg>-Xjsr305=strict</arg>
-          </args>
+          <sourceDirs>
+            <sourceDir>${project.basedir}/src/main/kotlin</sourceDir>
+            <sourceDir>${project.basedir}/src/main/java</sourceDir>
+          </sourceDirs>
           <compilerPlugins>
+            <plugin>jpa</plugin>
+            <plugin>all-open</plugin>
             <plugin>spring</plugin>
           </compilerPlugins>
+          <pluginOptions>
+            <option>all-open:annotation=javax.persistence.Entity</option>
+            <option>all-open:annotation=javax.persistence.Embeddable</option>
+            <option>all-open:annotation=javax.persistence.MappedSuperclass</option>
+          </pluginOptions>
+          <args>
+            <!-- https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/boot-features-kotlin.html#boot-features-kotlin-null-safety -->
+            <arg>-Xjsr305=strict</arg>
+          </args>
         </configuration>
         <dependencies>
+          <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-maven-noarg</artifactId>
+            <version>${kotlin.version}</version>
+          </dependency>
           <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-maven-allopen</artifactId>
@@ -84,5 +117,4 @@
       </plugin>
     </plugins>
   </build>
-
 </project>
