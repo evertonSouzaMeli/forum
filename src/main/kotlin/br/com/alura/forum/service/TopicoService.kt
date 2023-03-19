@@ -3,6 +3,7 @@ package br.com.alura.forum.service
 import br.com.alura.forum.dto.request.AtualizacaoTopicoDTO
 import br.com.alura.forum.dto.request.RequestTopicoDTO
 import br.com.alura.forum.dto.response.ResponseTopicoDTO
+import br.com.alura.forum.exception.NotFoundException
 import br.com.alura.forum.mapper.RequestTopicoMapper
 import br.com.alura.forum.mapper.ResponseTopicoMapper
 import br.com.alura.forum.model.Topico
@@ -24,7 +25,7 @@ class TopicoService(
         .filter { it.id == id }
         .findFirst()
         .map { responseTopicoMapper.map(it) }
-        .orElse(null)
+        .orElseThrow { NotFoundException("Topico não encontrado") }
 
     fun cadastrar(requestTopicoDTO: RequestTopicoDTO) : ResponseTopicoDTO {
         topicos = topicos.plus(requestTopicoMapper.map(requestTopicoDTO)
@@ -37,7 +38,7 @@ class TopicoService(
         val topico = topicos.stream()
             .filter { it.id == atualizacaoTopicoDTO.id }
             .findFirst()
-            .get()
+            .orElseThrow { NotFoundException("Topico não encontrado") }
 
         topicos = topicos.minus(topico)
             .plus(Topico(
@@ -57,7 +58,7 @@ class TopicoService(
         val topico = topicos.stream()
             .filter { it.id == id }
             .findFirst()
-            .get()
+            .orElseThrow { NotFoundException("Topico não encontrado") }
 
         topicos = topicos.minus(topico)
     }
