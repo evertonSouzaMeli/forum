@@ -1,5 +1,6 @@
 package br.com.alura.forum.service
 
+import br.com.alura.forum.dto.request.AtualizacaoTopicoDTO
 import br.com.alura.forum.dto.request.RequestTopicoDTO
 import br.com.alura.forum.dto.response.ResponseTopicoDTO
 import br.com.alura.forum.mapper.RequestTopicoMapper
@@ -16,17 +17,48 @@ class TopicoService(
 ) {
 
     fun listar(): List<ResponseTopicoDTO> = topicos.stream()
-        .map {responseTopicoMapper.map(it) }
+        .map { responseTopicoMapper.map(it) }
         .collect(Collectors.toList())
 
     fun buscarPorId(id: Long): ResponseTopicoDTO? = topicos.stream()
-            .filter { it.id == id }
-            .findFirst()
-            .map { responseTopicoMapper.map(it) }
-            .orElse(null)
+        .filter { it.id == id }
+        .findFirst()
+        .map { responseTopicoMapper.map(it) }
+        .orElse(null)
 
-    fun cadastrar(requestTopicoDTO: RequestTopicoDTO) {
+    fun cadastrar(requestTopicoDTO: RequestTopicoDTO) : ResponseTopicoDTO {
         topicos = topicos.plus(requestTopicoMapper.map(requestTopicoDTO)
             .apply { this.id = topicos.size.plus(1L) })
+
+        return responseTopicoMapper.map(requestTopicoMapper.map(requestTopicoDTO))
+    }
+
+    fun atualizar(atualizacaoTopicoDTO: AtualizacaoTopicoDTO) {
+        val topico = topicos.stream()
+            .filter { it.id == atualizacaoTopicoDTO.id }
+            .findFirst()
+            .get()
+
+        topicos = topicos.minus(topico)
+            .plus(Topico(
+                    id = atualizacaoTopicoDTO.id,
+                    titulo = atualizacaoTopicoDTO.titulo,
+                    mensagem = atualizacaoTopicoDTO.mensagem,
+                    autor = topico.autor,
+                    curso = topico.curso,
+                    respostas = topico.respostas,
+                    status = topico.status,
+                    dataCriacao = topico.dataCriacao
+                )
+            )
+    }
+
+    fun deletar(id: Long) {
+        val topico = topicos.stream()
+            .filter { it.id == id }
+            .findFirst()
+            .get()
+
+        topicos = topicos.minus(topico)
     }
 }
