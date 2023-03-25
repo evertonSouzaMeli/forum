@@ -6,6 +6,11 @@ import br.com.alura.forum.dto.response.ResponseTopicoDTO
 import br.com.alura.forum.service.TopicoService
 import javax.transaction.Transactional
 import javax.validation.Valid
+import org.springframework.cache.annotation.Cacheable
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.util.UriComponentsBuilder
 
@@ -22,7 +28,11 @@ import org.springframework.web.util.UriComponentsBuilder
 class TopicoController (private val topicoService: TopicoService) {
 
     @GetMapping
-    fun lista() : List<ResponseTopicoDTO> =  topicoService.listar()
+    @Cacheable("todos os topicos")
+    fun lista(@RequestParam(required = false) nomeCurso: String?,
+              @PageableDefault(sort = ["dataCriacao"], direction = Sort.Direction.DESC) paginacao: Pageable) : ResponseEntity<Page<ResponseTopicoDTO>> {
+        return ResponseEntity.ok().body(topicoService.listar(nomeCurso, paginacao))
+    }
 
     @GetMapping("/{id}")
     fun buscarPorId(@PathVariable id: Long): ResponseTopicoDTO? = topicoService.buscarPorId(id)

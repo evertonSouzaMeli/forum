@@ -8,7 +8,10 @@ import br.com.alura.forum.mapper.RequestTopicoMapper
 import br.com.alura.forum.mapper.ResponseTopicoMapper
 import br.com.alura.forum.model.Topico
 import br.com.alura.forum.repository.TopicoRepository
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.util.Optional
 
 @Service
 class TopicoService(
@@ -17,27 +20,36 @@ class TopicoService(
     private val requestTopicoMapper: RequestTopicoMapper,
 ) {
 
-    fun listar(): List<ResponseTopicoDTO> = repository.findAll().map { responseTopicoMapper.map(it) }
+    fun listar(nomeCurso: String?, paginacao: Pageable): Page<ResponseTopicoDTO> {
+        return Optional.ofNullable(nomeCurso)
+            .map {nomeCurso -> repository.findByCursoNome(nomeCurso, paginacao) }
+            .orElseGet { repository.findAll(paginacao) }
+            .map { responseTopicoMapper.map(it) }
+    }
 
     fun buscarPorId(id: Long): ResponseTopicoDTO? =
         repository.findById(id)
-        .map { responseTopicoMapper.map(it) }
-        .orElseThrow { NotFoundException("Topico não encontrado") }
+            .map { responseTopicoMapper.map(it) }
+            .orElseThrow { NotFoundException("Topico não encontrado") }
 
-    fun cadastrar(requestTopicoDTO: RequestTopicoDTO) : ResponseTopicoDTO {
-        val response: Topico = repository.save(requestTopicoMapper.map(requestTopicoDTO))
+    fun cadastrar(requestTopicoDTO: RequestTopicoDTO): ResponseTopicoDTO {
+        val result: Topico = requestTopicoMapper.map(requestTopicoDTO)
+
+        val response: Topico = repository.save(result)
+
         return responseTopicoMapper.map(response)
     }
 
-    fun atualizar(atualizacaoTopicoDTO: AtualizacaoTopicoDTO) : ResponseTopicoDTO {
+    fun atualizar(atualizacaoTopicoDTO: AtualizacaoTopicoDTO): ResponseTopicoDTO {
         var topico = repository
             .findById(atualizacaoTopicoDTO.id)
+            .map { responseTopicoMapper.map(it) }
             .orElseThrow { NotFoundException("Topico não encontrado") }
 
         topico.titulo = atualizacaoTopicoDTO.titulo
         topico.mensagem = atualizacaoTopicoDTO.mensagem
 
-        return responseTopicoMapper.map(topico)
+        return topico
     }
 
     fun deletar(id: Long) = repository.deleteById(id)

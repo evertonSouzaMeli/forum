@@ -13,9 +13,9 @@ data class RequestTopicoDTO (
     @field:Size(min = 5, max = 255)
     val mensagem: String,
 
-    @field:NotNull
+    @field:NotNull(message = "Curso não pode ser nulo")
     val idCurso: Long,
 
-    @field:NotNull
+    @field:NotNull(message = "Usuario não pode ser nulo")
     val idAutor: Long
 )

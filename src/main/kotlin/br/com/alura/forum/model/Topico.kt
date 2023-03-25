@@ -11,9 +11,12 @@ data class Topico (
     @Id
     @GeneratedValue(strategy = IDENTITY)
     var id: Long? = null,
+
     var titulo: String,
+
     var mensagem: String,
-    val dataCriacao: LocalDateTime = LocalDateTime.now(),
+
+    val dataCriacao: LocalDateTime,
 
     @ManyToOne
     @JoinColumn(name = "curso_id", referencedColumnName = "id", )
@@ -24,7 +27,7 @@ data class Topico (
     val autor: Usuario,
 
     @Enumerated(STRING)
-    val status: StatusTopico = StatusTopico.NAO_RESPONDIDO,
+    val status: StatusTopico,
 
     @OneToMany(mappedBy = "topico", cascade = [CascadeType.ALL])
     val respostas: List<Resposta> = ArrayList()

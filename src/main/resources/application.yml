@@ -1,18 +1,17 @@
 spring:
-  sql:
-    init:
-      mode: always
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
   datasource:
     driverClassName: org.h2.Driver
-    url: jdbc:h2:file:./forum
+    url: jdbc:h2:mem:forum
     username: sa
     password:
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    defer-datasource-initialization: true
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
+     hibernate:
+       ddl-auto: update
+     database-platform: org.hibernate.dialect.H2Dialect
+     properties:
+       hibernate:
+         show_sql: true
+         format_sql: true
