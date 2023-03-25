@@ -6,6 +6,7 @@ import br.com.alura.forum.dto.response.ResponseTopicoDTO
 import br.com.alura.forum.service.TopicoService
 import javax.transaction.Transactional
 import javax.validation.Valid
+import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -39,6 +40,7 @@ class TopicoController (private val topicoService: TopicoService) {
 
     @PostMapping
     @Transactional
+    @CacheEvict(value = ["todos os topicos"], allEntries = true)
     fun cadastrar(
         @Valid @RequestBody requestTopicoDTO: RequestTopicoDTO,
         uriComponentsBuilder: UriComponentsBuilder) : ResponseEntity<ResponseTopicoDTO> {
@@ -51,12 +53,14 @@ class TopicoController (private val topicoService: TopicoService) {
 
     @PutMapping
     @Transactional
+    @CacheEvict(value = ["todos os topicos"], allEntries = true)
     fun atualizar(@Valid @RequestBody atualizacaoTopicoDTO: AtualizacaoTopicoDTO) {
         topicoService.atualizar(atualizacaoTopicoDTO)
     }
 
     @DeleteMapping("/{id}")
     @Transactional
+    @CacheEvict(value = ["todos os topicos"], allEntries = true)
     fun deletar(@PathVariable id: Long) {
         topicoService.deletar(id)
     }

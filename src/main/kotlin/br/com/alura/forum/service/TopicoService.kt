@@ -22,7 +22,7 @@ class TopicoService(
 
     fun listar(nomeCurso: String?, paginacao: Pageable): Page<ResponseTopicoDTO> {
         return Optional.ofNullable(nomeCurso)
-            .map {nomeCurso -> repository.findByCursoNome(nomeCurso, paginacao) }
+            .map { nome -> repository.findByCursoNome(nome, paginacao) }
             .orElseGet { repository.findAll(paginacao) }
             .map { responseTopicoMapper.map(it) }
     }
@@ -41,15 +41,13 @@ class TopicoService(
     }
 
     fun atualizar(atualizacaoTopicoDTO: AtualizacaoTopicoDTO): ResponseTopicoDTO {
-        var topico = repository
+        return repository
             .findById(atualizacaoTopicoDTO.id)
-            .map { responseTopicoMapper.map(it) }
+            .map { topico ->
+                topico.titulo = atualizacaoTopicoDTO.titulo
+                topico.mensagem = atualizacaoTopicoDTO.mensagem
+                responseTopicoMapper.map(topico) }
             .orElseThrow { NotFoundException("Topico não encontrado") }
-
-        topico.titulo = atualizacaoTopicoDTO.titulo
-        topico.mensagem = atualizacaoTopicoDTO.mensagem
-
-        return topico
     }
 
     fun deletar(id: Long) = repository.deleteById(id)
