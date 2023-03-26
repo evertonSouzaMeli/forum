@@ -20,17 +20,18 @@ import org.springframework.security.web.SecurityFilterChain
 class SecurityConfiguration {
 
     @Bean
-    fun authenticationManager(authenticationConfiguration: AuthenticationConfiguration): AuthenticationManager {
-        return authenticationConfiguration.authenticationManager
-    }
-
-    @Bean
     fun filterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity
-            .authorizeRequests { it.anyRequest().authenticated() }
+            .authorizeRequests {
+                it.antMatchers("/topicos").hasAuthority("LEITURA_ESCRITA")
+                it.antMatchers("/h2-console/**").permitAll()
+                it.anyRequest().authenticated()
+            }
+            .headers { it.frameOptions().disable() }
             .sessionManagement { it.sessionCreationPolicy(STATELESS) }
             .formLogin { it.disable() }
             .httpBasic(Customizer.withDefaults())
+            .csrf { it.ignoringAntMatchers("/h2-console/**") }
             .build()
     }
 
