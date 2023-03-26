@@ -33,4 +33,5 @@ build/
 .vscode/
 
 forum.mv.db
-forum.trace.db
+forum.trace.db!/forum.iml
+/forum.iml
