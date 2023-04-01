@@ -1,7 +1,6 @@
 package br.com.alura.forum.config
 
 import br.com.alura.forum.model.Usuario
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class UserDetailsImpl(val usuario: Usuario): UserDetails {
