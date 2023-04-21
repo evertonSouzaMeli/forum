@@ -23,6 +23,7 @@ class SecurityConfiguration(
     private val configuration: AuthenticationConfiguration,
     private val jwtUtil: JWTUtil
 ) {
+
     companion object {
         const val LEITURA_ESCRITA = "LEITURA_ESCRITA"
     }
@@ -33,7 +34,7 @@ class SecurityConfiguration(
             .headers { it.frameOptions().disable() }
             .authorizeRequests {
                 it.antMatchers(POST,"/login").permitAll()
-                it.antMatchers(GET, "/topicos").hasAuthority(LEITURA_ESCRITA)
+                it.antMatchers(GET, "/topicos").hasAuthority(Companion.LEITURA_ESCRITA)
                 it.anyRequest().authenticated()
             }
             .addFilterBefore(JWTLoginFilter(configuration.authenticationManager, jwtUtil), UsernamePasswordAuthenticationFilter().javaClass)

@@ -25,8 +25,8 @@ class JWTUtil(
     fun generateToken(username: String, authorities: MutableCollection<out GrantedAuthority>): String? =
         Jwts.builder()
             .setSubject(username)
-            .claim("role", authorities)
             .setIssuedAt(Date(System.currentTimeMillis() + expiration))
+            .claim("role", authorities)
             .signWith(HS512, secret.toByteArray())
             .compact()
 

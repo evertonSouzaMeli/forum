@@ -1,0 +1,22 @@
+spring:
+  flyway:
+    locations: classpath:db/migration
+    enabled: true
+
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:file:./data/db_forum
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+
+jwt:
+  secret: secreto
