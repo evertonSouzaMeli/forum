@@ -5,8 +5,8 @@ import java.time.LocalDateTime
 
 data class ResponseTopicoDTO (
     val id: Long?,
-    var titulo: String,
-    var mensagem: String,
+    val titulo: String,
+    val mensagem: String,
     val status: StatusTopico,
     val dataCriacao: LocalDateTime
 )
