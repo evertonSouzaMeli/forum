@@ -45,12 +45,12 @@ class TopicoRepositoryTest(
     fun `deve gerar um retornar um objeto salvo`() {
         repository.save(Topico.build())
 
-        val relatorio = repository.findByCursoNome("Kotlin", Pageable.unpaged())
+        val relatorio = repository.findByCursoNome("Kotlin", Pageable.unpaged()).get().findFirst()
 
         assertNotNull(relatorio)
 
-        assertEquals("Topico teste", relatorio.get().findFirst().get().titulo)
+        assertEquals("Topico teste", relatorio.get().titulo)
 
-        //assertEquals("Mensagem teste", relatorio.get().findFirst().get().mensagem)
+        assertEquals("Mensagem teste", relatorio.get().mensagem)
     }
 }
