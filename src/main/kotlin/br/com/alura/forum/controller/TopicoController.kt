@@ -4,8 +4,8 @@ import br.com.alura.forum.dto.request.AtualizacaoTopicoDTO
 import br.com.alura.forum.dto.request.RequestTopicoDTO
 import br.com.alura.forum.dto.response.ResponseTopicoDTO
 import br.com.alura.forum.service.TopicoService
-import javax.transaction.Transactional
-import javax.validation.Valid
+import jakarta.transaction.Transactional
+import jakarta.validation.Valid
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.Page

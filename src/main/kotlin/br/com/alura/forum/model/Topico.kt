@@ -1,15 +1,13 @@
 package br.com.alura.forum.model
 
 import br.com.alura.forum.enums.StatusTopico
-import javax.persistence.*
-import javax.persistence.EnumType.STRING
-import javax.persistence.GenerationType.IDENTITY
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
 data class Topico (
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
     var titulo: String,
@@ -26,7 +24,7 @@ data class Topico (
     @JoinColumn(name = "usuario_id", referencedColumnName = "id", )
     val autor: Usuario,
 
-    @Enumerated(STRING)
+    @Enumerated(EnumType.STRING)
     val status: StatusTopico,
 
     @OneToMany(mappedBy = "topico", cascade = [CascadeType.ALL])

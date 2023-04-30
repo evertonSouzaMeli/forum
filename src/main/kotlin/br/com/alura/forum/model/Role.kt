@@ -1,15 +1,15 @@
 package br.com.alura.forum.model
 
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType.IDENTITY
-import javax.persistence.Id
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import org.springframework.security.core.GrantedAuthority
 
 @Entity
 data class Role (
     @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private val id: Long,
     private val nome: String
 ): GrantedAuthority {
